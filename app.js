@@ -51,7 +51,7 @@ addButton.addEventListener('click', function (e) {
     card.append(choiceDescription);
     mainSection.append(card);
     if (url !== '')
-        cardaddEventListener('click', function () {
+        card.addEventListener('click', function () {
             window.open(url);
         });
 });
