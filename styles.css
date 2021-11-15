@@ -112,7 +112,7 @@ body {
     background-color: transparent;
     cursor: pointer;
     border: none;
-    transition-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+    transition-timing-function: cubic-bezier(0.69, 0.34, 0, 1.26);
     transition-duration       : 300ms;
 }
 
