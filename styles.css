@@ -90,6 +90,18 @@ body {
     width: 7rem;
 }
 
+.CloseText {
+    color        : rgba(0, 0, 0, 0.19);
+    margin       : 0 auto;
+    margin-top   : 0.1em;
+    margin-bottom: 0.5em;
+    display      : inline-block;
+}
+
+.CloseText:hover {
+    text-decoration: underline solid rgba(0, 0, 0, 0.19);
+}
+
 .ChoiceName {
     font-family: Arial, Helvetica, sans-serif;
 }
@@ -99,24 +111,24 @@ body {
     padding-right: 1em;
 }
 
-.BottomButton{
-    z-index: 1;
-    position: fixed;
-    right: 1em;
-    bottom: 1em;
-    width: 5em;
-    height: 5em;
-    background-image: url('add.png');
-    background-size: cover;
-    border-radius: 100%;
-    background-color: transparent;
-    cursor: pointer;
-    border: none;
+.BottomButton {
+    z-index                   : 1;
+    position                  : fixed;
+    right                     : 1em;
+    bottom                    : 1em;
+    width                     : 5em;
+    height                    : 5em;
+    background-image          : url('add.png');
+    background-size           : cover;
+    border-radius             : 100%;
+    background-color          : transparent;
+    cursor                    : pointer;
+    border                    : none;
     transition-timing-function: cubic-bezier(0.69, 0.34, 0, 1.26);
     transition-duration       : 300ms;
 }
 
-.BottomButton:hover{
-    width: 7em;
+.BottomButton:hover {
+    width : 7em;
     height: 7em;
 }

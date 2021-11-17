@@ -10,6 +10,7 @@ function createInfoCard(title, desc, img, url) {
     const spacer2 = document.createElement('div');
     const choiceName = document.createElement('h2');
     const choiceDescription = document.createElement('p');
+    const closeText = document.createElement('p');
 
     card.classList.add('ChoiceCard');
     topPart.classList.add('TopPart');
@@ -18,6 +19,7 @@ function createInfoCard(title, desc, img, url) {
     spacer2.classList.add('spacer');
     choiceName.classList.add('ChoiceName');
     choiceDescription.classList.add('ChoiceDescription');
+    closeText.classList.add('CloseText');
 
     if (img)
         choiceImage.src = img;
@@ -31,6 +33,7 @@ function createInfoCard(title, desc, img, url) {
     if (desc.length > 150)
         choiceDescription.innerHTML = desc.slice(0, 147) + '...';
     else choiceDescription.innerHTML = desc;
+    closeText.innerHTML = 'close';
 
     topPart.append(choiceImage);
     topPart.append(spacer1);
@@ -38,6 +41,11 @@ function createInfoCard(title, desc, img, url) {
     topPart.append(spacer2);
     card.append(topPart);
     card.append(choiceDescription);
+    card.append(closeText);
+    closeText.addEventListener('click', (e) => {
+        e.stopPropagation();
+        e.path[1].remove();
+    });
 
     if (url)
         card.addEventListener('click', function () {
@@ -89,7 +97,6 @@ addButton.addEventListener('click', function (e) {
     mainSection.append(card);
 });
 
-
 // XML stuff - to be removed later
 const data = `<?xml version="1.0" encoding="UTF-8"?>
 <items>
@@ -129,44 +136,7 @@ const data = `<?xml version="1.0" encoding="UTF-8"?>
 const parser = new DOMParser();
 const xmlDoc = parser.parseFromString(data, 'text/xml');
 
-const arr = [];
 for (item of xmlDoc.querySelectorAll('item')) {
-    const card = document.createElement('div');
-    const topPart = document.createElement('div');
-    const choiceImage = document.createElement('img');
-    const spacer1 = document.createElement('div');
-    const spacer2 = document.createElement('div');
-    const choiceName = document.createElement('h2');
-    const choiceDescription = document.createElement('p');
-    card.classList.add('ChoiceCard');
-    topPart.classList.add('TopPart');
-    choiceImage.classList.add('ChoiceImage');
-    spacer1.classList.add('spacer');
-    spacer2.classList.add('spacer');
-    choiceName.classList.add('ChoiceName');
-    choiceDescription.classList.add('ChoiceDescription');
-    choiceImage.src = item.children[1].innerHTML;
-
-    if (item.children[2].innerHTML.length > 17)
-        choiceName.innerHTML = item.children[2].innerHTML.slice(0, 14) + '...';
-    else choiceName.innerHTML = item.children[2].innerHTML;
-
-    if (item.children[3].innerHTML.length > 150)
-        choiceDescription.innerHTML = item.children[3].innerHTML.slice(0, 147) + '...';
-    else choiceDescription.innerHTML = item.children[3].innerHTML;
-
-    topPart.append(choiceImage);
-    topPart.append(spacer1);
-    topPart.append(choiceName);
-    topPart.append(spacer2);
-    card.append(topPart);
-    card.append(choiceDescription);
+    const card = createInfoCard(item.children[2].innerHTML, item.children[3].innerHTML, item.children[1].innerHTML, item.children[0].innerHTML);
     mainSection.append(card);
-    arr.push((item.children[0].innerHTML));
-}
-
-for (let i = 0; i < mainSection.childElementCount; i++) {
-    mainSection.children[i].addEventListener('click', function () {
-        window.open(arr[i]);
-    });
 }
