@@ -1,8 +1,6 @@
 //Selects the main section, with all info cards
 const mainSection = document.querySelector('.MainSection');
 
-const addButton = document.querySelector('.BottomButton');
-
 // accepts the parameters and returns an info card, to be (usually) appended to mainSection, selected abv.
 function createInfoCard(title, desc, img, url) {
     const card = document.createElement('div');
@@ -40,7 +38,7 @@ function createInfoCard(title, desc, img, url) {
     topPart.append(spacer2);
     card.append(topPart);
     card.append(choiceDescription);
-    
+
     if (url)
         card.addEventListener('click', function () {
             window.open(url);
@@ -49,21 +47,40 @@ function createInfoCard(title, desc, img, url) {
     return card;
 }
 
+//TODO: function to get the data from API, returns an object with title, desc, img, url
+async function getData(query) {
+    //https://en.wikipedia.org/w/api.php?action=query&formatversion=2
+    // &prop=pageimages%7Cpageterms&titles=India&format=json&piprop=thumbnail&pithumbsize=600
+    const baseUrl = 'https://en.wikipedia.org/w/api.php';
+    const config = {
+        params: {
+            action: 'query', formatversion: '2',
+            prop: 'pageimages%7Cpageterms',
+            titles: encodeURIComponent(query),
+            format: 'json',
+            piprop: 'thumbnail',
+            pithumbsize: '600',
+            origin: '*'
+        }
+    };
+    return await axios.get(baseUrl, config);
+}
+
+// Adds click event listener and card creator to add button
+const addButton = document.querySelector('.BottomButton');
 addButton.addEventListener('click', function (e) {
     let name = '';
     while (name == '') {
         name = prompt('Enter the card name');
     }
-    if(!name)
-    {
+    if (!name) {
         name = 'Untitled';
     }
     let desc = '';
     while (desc == '') {
         desc = prompt('Enter the card decription');
     }
-    if(!desc)
-    {
+    if (!desc) {
         desc = 'This card does not have any associated description with it.'
     }
     const img = prompt('Enter the card image url (leave empty if none)');
