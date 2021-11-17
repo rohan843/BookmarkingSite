@@ -1,19 +1,10 @@
+//Selects the main section, with all info cards
 const mainSection = document.querySelector('.MainSection');
 
 const addButton = document.querySelector('.BottomButton');
-addButton.addEventListener('click', function (e) {
-    let name = '';
-    while(name == '')
-    {
-        name = prompt('Enter the card name');
-    }
-    let desc = '';
-    while(desc == '')
-    {
-        desc = prompt('Enter the card decription');
-    }
-    const img = prompt('Enter the card image url (leave empty if none)');
-    const url = prompt('Enter the card url (leave empty if none) ');
+
+// accepts the parameters and returns an info card, to be (usually) appended to mainSection, selected abv.
+function createInfoCard(title, desc, img, url) {
     const card = document.createElement('div');
     const topPart = document.createElement('div');
     const choiceImage = document.createElement('img');
@@ -30,14 +21,14 @@ addButton.addEventListener('click', function (e) {
     choiceName.classList.add('ChoiceName');
     choiceDescription.classList.add('ChoiceDescription');
 
-    if (img !== '')
+    if (img)
         choiceImage.src = img;
     else
         choiceImage.src = 'https://cdn.pixabay.com/photo/2020/12/18/12/47/forest-vector-5841970_960_720.jpg';
 
-    if (name.length > 17)
-        choiceName.innerHTML = name.slice(0, 14) + '...';
-    else choiceName.innerHTML = name;
+    if (title.length > 17)
+        choiceName.innerHTML = title.slice(0, 14) + '...';
+    else choiceName.innerHTML = title;
 
     if (desc.length > 150)
         choiceDescription.innerHTML = desc.slice(0, 147) + '...';
@@ -49,13 +40,40 @@ addButton.addEventListener('click', function (e) {
     topPart.append(spacer2);
     card.append(topPart);
     card.append(choiceDescription);
-    mainSection.append(card);
-    if (url !== '')
+    
+    if (url)
         card.addEventListener('click', function () {
             window.open(url);
         });
+
+    return card;
+}
+
+addButton.addEventListener('click', function (e) {
+    let name = '';
+    while (name == '') {
+        name = prompt('Enter the card name');
+    }
+    if(!name)
+    {
+        name = 'Untitled';
+    }
+    let desc = '';
+    while (desc == '') {
+        desc = prompt('Enter the card decription');
+    }
+    if(!desc)
+    {
+        desc = 'This card does not have any associated description with it.'
+    }
+    const img = prompt('Enter the card image url (leave empty if none)');
+    const url = prompt('Enter the card url (leave empty if none) ');
+    const card = createInfoCard(name, desc, img, url);
+    mainSection.append(card);
 });
 
+
+// XML stuff - to be removed later
 const data = `<?xml version="1.0" encoding="UTF-8"?>
 <items>
     <item>
@@ -94,9 +112,6 @@ const data = `<?xml version="1.0" encoding="UTF-8"?>
 const parser = new DOMParser();
 const xmlDoc = parser.parseFromString(data, 'text/xml');
 
-// const handler = function (e){
-//     window.open('https://en.wikipedia.org/wiki/Western_gull');
-// }
 const arr = [];
 for (item of xmlDoc.querySelectorAll('item')) {
     const card = document.createElement('div');
