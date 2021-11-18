@@ -1,8 +1,15 @@
 //Selects the main section, with all info cards
 const mainSection = document.querySelector('.MainSection');
 
+const rg = /(^\w{1}|\.\s*\w{1})/gi;
+
 // accepts the parameters and returns an info card, to be (usually) appended to mainSection, selected abv.
 function createInfoCard(title, desc, img, url) {
+
+    desc = desc.replace(rg, function(toReplace) {
+        return toReplace.toUpperCase();
+    });
+
     const card = document.createElement('div');
     const topPart = document.createElement('div');
     const choiceImage = document.createElement('img');

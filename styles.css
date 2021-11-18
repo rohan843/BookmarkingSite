@@ -104,6 +104,7 @@ body {
 
 .ChoiceName {
     font-family: Arial, Helvetica, sans-serif;
+    text-transform: capitalize;
 }
 
 .ChoiceDescription {
