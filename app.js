@@ -9,7 +9,9 @@ const rg = /(^\w{1}|\.\s*\w{1})/gi;
 
 queryForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    await insertWikiCard(queryForm.elements.query.value);
+    const query = queryForm.elements.query.value;
+    queryForm.elements.query.value = '';
+    await insertWikiCard(query);
 });
 
 // accepts the parameters and returns an info card, to be (usually) appended to mainSection, selected abv.
