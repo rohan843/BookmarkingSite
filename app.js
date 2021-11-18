@@ -103,7 +103,7 @@ async function getData(query) {
         console.log(e);
         return {
             title: 'Error',
-            desc: 'Some error occurred. Please refine the search, or try again.',
+            desc: 'Some error occurred. Please refine the search, then try again.',
             img: 'https://straightvisions.com/wp-content/uploads/2019/08/shutterstock_1135176134-scaled.jpg',
             url: ''
         }
