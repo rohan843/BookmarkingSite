@@ -55,23 +55,48 @@ function createInfoCard(title, desc, img, url) {
     return card;
 }
 
-//TODO: function to get the data from API, returns an object with title, desc, img, url
+//function to get the data from API, returns an object with title, desc, img, url
 async function getData(query) {
-    //https://en.wikipedia.org/w/api.php?action=query&formatversion=2
-    // &prop=pageimages%7Cpageterms&titles=India&format=json&piprop=thumbnail&pithumbsize=600
-    const baseUrl = 'https://en.wikipedia.org/w/api.php';
-    const config = {
-        params: {
-            action: 'query', formatversion: '2',
-            prop: 'pageimages%7Cpageterms',
-            titles: encodeURIComponent(query),
-            format: 'json',
-            piprop: 'thumbnail',
-            pithumbsize: '600',
-            origin: '*'
+    //https://en.wikipedia.org/w/api.php?action=query&formatversion=2&prop=pageimages%7Cpageterms&titles=India&format=json&piprop=thumbnail&pithumbsize=600
+    // const baseUrl = 'https://en.wikipedia.org/w/api.php';
+    // const config = {
+    //     params: {
+    //         action: 'query', 
+    //         formatversion: '2',
+    //         prop: 'pageimages%7Cpageterms',
+    //         titles: encodeURIComponent(query),
+    //         format: 'json',
+    //         piprop: 'thumbnail',
+    //         pithumbsize: '600',
+    //         origin: '*'
+    //     }
+    // };
+    // return await axios.get(baseUrl, config);
+    try {
+        const res = await axios.get(`https://en.wikipedia.org/w/api.php?action=query&formatversion=2&prop=pageimages%7Cpageterms&titles=${encodeURIComponent(query)}&format=json&piprop=thumbnail&pithumbsize=600&origin=*`);
+        return {
+            title: res.data.query.pages[0].title,
+            desc: res.data.query.pages[0].terms.description[0],
+            img: res.data.query.pages[0].thumbnail.source,
+            url: `https://en.wikipedia.org/?curid=${res.data.query.pages[0].pageid}`
+        };
+    }
+    catch (e) {
+        console.log(e);
+        return {
+            title: 'Error',
+            desc: 'Some error occurred. Please refine the search, or try again.',
+            img: 'https://straightvisions.com/wp-content/uploads/2019/08/shutterstock_1135176134-scaled.jpg',
+            url: ''
         }
-    };
-    return await axios.get(baseUrl, config);
+    }
+}
+
+async function insertWikiCard(query)
+{
+    const data = await getData(query);
+    const card = createInfoCard(data.title, data.desc, data.img, data.url);
+    mainSection.append(card);
 }
 
 // Adds click event listener and card creator to add button
@@ -97,8 +122,10 @@ addButton.addEventListener('click', function (e) {
     mainSection.append(card);
 });
 
-// XML stuff - to be removed later
-const data = `<?xml version="1.0" encoding="UTF-8"?>
+//generates default cards
+function createDefaultCards() {
+    // XML stuff - to be removed later
+    const data = `<?xml version="1.0" encoding="UTF-8"?>
 <items>
     <item>
         <url>https://en.wikipedia.org/wiki/Western_gull</url>
@@ -133,10 +160,12 @@ const data = `<?xml version="1.0" encoding="UTF-8"?>
     </item>
 </items>`;
 
-const parser = new DOMParser();
-const xmlDoc = parser.parseFromString(data, 'text/xml');
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(data, 'text/xml');
 
-for (item of xmlDoc.querySelectorAll('item')) {
-    const card = createInfoCard(item.children[2].innerHTML, item.children[3].innerHTML, item.children[1].innerHTML, item.children[0].innerHTML);
-    mainSection.append(card);
+    for (item of xmlDoc.querySelectorAll('item')) {
+        const card = createInfoCard(item.children[2].innerHTML, item.children[3].innerHTML, item.children[1].innerHTML, item.children[0].innerHTML);
+        mainSection.append(card);
+    }
 }
+createDefaultCards();
