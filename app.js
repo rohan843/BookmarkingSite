@@ -1,12 +1,21 @@
 //Selects the main section, with all info cards
 const mainSection = document.querySelector('.MainSection');
 
+//Selects the form for api query
+const queryForm = document.querySelector('.wikiQueryForm');
+
+//regex for converting to sentence case
 const rg = /(^\w{1}|\.\s*\w{1})/gi;
+
+queryForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    await insertWikiCard(queryForm.elements.query.value);
+});
 
 // accepts the parameters and returns an info card, to be (usually) appended to mainSection, selected abv.
 function createInfoCard(title, desc, img, url) {
 
-    desc = desc.replace(rg, function(toReplace) {
+    desc = desc.replace(rg, function (toReplace) {
         return toReplace.toUpperCase();
     });
 
@@ -99,8 +108,7 @@ async function getData(query) {
     }
 }
 
-async function insertWikiCard(query)
-{
+async function insertWikiCard(query) {
     const data = await getData(query);
     const card = createInfoCard(data.title, data.desc, data.img, data.url);
     mainSection.append(card);
