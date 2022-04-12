@@ -73,71 +73,28 @@ function createInfoCard(title, desc, img, url) {
     return card;
 }
 
-//function to get the data from API, returns an object with title, desc, img, url
-async function getData(query) {
-    //https://en.wikipedia.org/w/api.php?action=query&formatversion=2&prop=pageimages%7Cpageterms&titles=India&format=json&piprop=thumbnail&pithumbsize=600
-    // const baseUrl = 'https://en.wikipedia.org/w/api.php';
-    // const config = {
-    //     params: {
-    //         action: 'query', 
-    //         formatversion: '2',
-    //         prop: 'pageimages%7Cpageterms',
-    //         titles: encodeURIComponent(query),
-    //         format: 'json',
-    //         piprop: 'thumbnail',
-    //         pithumbsize: '600',
-    //         origin: '*'
-    //     }
-    // };
-    // return await axios.get(baseUrl, config);
-    try {
-        const res = await axios.get(`https://en.wikipedia.org/w/api.php?action=query&formatversion=2&prop=pageimages%7Cpageterms&titles=${encodeURIComponent(query)}&format=json&piprop=thumbnail&pithumbsize=600&origin=*`);
-        return {
-            title: res.data.query.pages[0].title,
-            desc: res.data.query.pages[0].terms.description[0],
-            img: res.data.query.pages[0].thumbnail.source,
-            url: `https://en.wikipedia.org/?curid=${res.data.query.pages[0].pageid}`
-        };
-    }
-    catch (e) {
-        console.log(e);
-        return {
-            title: 'Error',
-            desc: 'Some error occurred. Please refine the search, then try again.',
-            img: 'https://straightvisions.com/wp-content/uploads/2019/08/shutterstock_1135176134-scaled.jpg',
-            url: ''
-        }
-    }
-}
-
-async function insertWikiCard(query) {
-    const data = await getData(query);
-    const card = createInfoCard(data.title, data.desc, data.img, data.url);
-    mainSection.append(card);
-}
-
-// Adds click event listener and card creator to add button
-const addButton = document.querySelector('.BottomButton');
-addButton.addEventListener('click', function (e) {
-    let name = '';
-    while (name == '') {
-        name = prompt('Enter the card name');
-    }
-    if (!name) {
-        name = 'Untitled';
-    }
-    let desc = '';
-    while (desc == '') {
-        desc = prompt('Enter the card decription');
-    }
-    if (!desc) {
-        desc = 'This card does not have any associated description with it.'
-    }
-    const img = prompt('Enter the card image url (leave empty if none)');
-    const url = prompt('Enter the card url (leave empty if none) ');
-    const card = createInfoCard(name, desc, img, url);
-    mainSection.append(card);
-});
+// // Adds click event listener and card creator to add button
+// const addButton = document.querySelector('.BottomButton');
+// addButton.addEventListener('click', function (e) {
+//     let name = '';
+//     while (name == '') {
+//         name = prompt('Enter the card name');
+//     }
+//     if (!name) {
+//         name = 'Untitled';
+//     }
+//     let desc = '';
+//     while (desc == '') {
+//         desc = prompt('Enter the card decription');
+//     }
+//     if (!desc) {
+//         desc = 'This card does not have any associated description with it.'
+//     }
+//     const img = prompt('Enter the card image url (leave empty if none)');
+//     const url = prompt('Enter the card url (leave empty if none) ');
+//     const card = createInfoCard(name, desc, img, url);
+//     mainSection.append(card);
+// });
 
 //generates default cards
 function createDefaultCards() {
